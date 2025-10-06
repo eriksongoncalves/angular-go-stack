@@ -17,13 +17,19 @@ export class ModalControllerService {
 
   openNewTaskModal(): DialogRef<unknown, TaskFormModal> {
     return this._dialog.open(TaskFormModal, {
-      ...this.modalSizeOptions
+      ...this.modalSizeOptions,
+      data: {
+        mode: 'create'
+      }
     })
   }
 
   openEditTaskModal(): DialogRef<unknown, TaskFormModal> {
     return this._dialog.open(TaskFormModal, {
-      ...this.modalSizeOptions
+      ...this.modalSizeOptions,
+      data: {
+        mode: 'edit'
+      }
     })
   }
 

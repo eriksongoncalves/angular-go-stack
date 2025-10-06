@@ -7,6 +7,7 @@
     "paths": {
       "@/*": ["./src/app/*"],
       "@components/*": ["./src/app/components/*"],
+      "@interfaces/*": ["./src/app/interfaces/*"],
       "@services/*": ["./src/app/services/*"]
     },
     "strict": true,

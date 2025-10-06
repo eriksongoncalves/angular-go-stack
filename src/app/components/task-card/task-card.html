@@ -5,14 +5,18 @@
   </div>
   <p class="text-sm font-light">Essa é a minha tarefa para criar uma aplicação angular</p>
   <div class="item-center flex gap-1">
-    <img src="images/icon-comments.svg" class="" alt="" />
+    <img src="images/icon-comments.svg" alt="" />
+
     <p class="cursor-pointer text-xs font-semibold text-[#2a89ef] underline underline-offset-2">
       2 comentários
     </p>
-    <p
+
+    <button
+      type="button"
+      (click)="openEditTaskModal()"
       class="ml-auto cursor-pointer text-xs font-semibold text-[#2a89ef] underline underline-offset-2"
     >
       Editar
-    </p>
+    </button>
   </div>
 </div>
