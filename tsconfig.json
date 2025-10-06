@@ -8,7 +8,9 @@
       "@/*": ["./src/app/*"],
       "@components/*": ["./src/app/components/*"],
       "@interfaces/*": ["./src/app/interfaces/*"],
-      "@services/*": ["./src/app/services/*"]
+      "@services/*": ["./src/app/services/*"],
+      "@enums/*": ["./src/app/enums/*"],
+      "@utils/*": ["./src/app/utils/*"]
     },
     "strict": true,
     "noImplicitOverride": true,
