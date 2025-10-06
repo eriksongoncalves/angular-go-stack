@@ -3,6 +3,7 @@ import { Dialog, DialogRef } from '@angular/cdk/dialog'
 
 import { TaskFormModal } from '@/components/task-form-modal/task-form-modal'
 import { TaskCommentsModal } from '@/components/task-comments-modal/task-comments-modal'
+import { ITaskFormControls } from '@/interfaces/task-form-controls'
 
 @Injectable({
   providedIn: 'root'
@@ -15,20 +16,27 @@ export class ModalControllerService {
 
   private readonly _dialog = inject(Dialog)
 
-  openNewTaskModal(): DialogRef<unknown, TaskFormModal> {
-    return this._dialog.open(TaskFormModal, {
+  openNewTaskModal(): DialogRef<ITaskFormControls, unknown> {
+    return this._dialog.open<ITaskFormControls>(TaskFormModal, {
       ...this.modalSizeOptions,
+      disableClose: true,
       data: {
-        mode: 'create'
+        mode: 'create',
+        formValues: {
+          name: '',
+          description: ''
+        }
       }
     })
   }
 
-  openEditTaskModal(): DialogRef<unknown, TaskFormModal> {
-    return this._dialog.open(TaskFormModal, {
+  openEditTaskModal(formValues: ITaskFormControls): DialogRef<ITaskFormControls, unknown> {
+    return this._dialog.open<ITaskFormControls>(TaskFormModal, {
       ...this.modalSizeOptions,
+      disableClose: true,
       data: {
-        mode: 'edit'
+        mode: 'edit',
+        formValues
       }
     })
   }

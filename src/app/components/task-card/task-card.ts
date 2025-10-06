@@ -1,3 +1,4 @@
+import { ITaskFormControls } from '@/interfaces/task-form-controls'
 import { Component, inject } from '@angular/core'
 
 import { ModalControllerService } from '@services/modal-controller'
@@ -12,6 +13,13 @@ export class TaskCard {
   private readonly _modalControllerService = inject(ModalControllerService)
 
   openEditTaskModal(): void {
-    this._modalControllerService.openEditTaskModal()
+    const dialogRef = this._modalControllerService.openEditTaskModal({
+      name: 'Nome tarefa',
+      description: 'Descrição tarefa'
+    })
+
+    dialogRef.closed.subscribe((formValues?: ITaskFormControls) => {
+      console.log('>>> Tarefa alterada: ', formValues)
+    })
   }
 }
