@@ -25,11 +25,11 @@ export class TaskService {
 
   // DOING
   private doingTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly doingTasks = this.doingTasks$.asObservable()
+  readonly doingTasks = this.doingTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
 
   // DONE
   private doneTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly doneTasks = this.doneTasks$.asObservable()
+  readonly doneTasks = this.doneTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
 
   addTask(taskInfos: ITaskFormControls): void {
     const newTask: ITask = {
