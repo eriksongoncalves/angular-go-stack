@@ -43,4 +43,40 @@ export class TaskService {
 
     this.todoTasks$.next([...currentList, newTask])
   }
+
+  updateTaskStatus(
+    taskId: string,
+    taskCurrentStatus: TaskStatus,
+    taskNextStatus: TaskStatus
+  ): void {
+    if (taskCurrentStatus === taskNextStatus) return
+
+    const currentTaskList = this.getTaskListByStatus(taskCurrentStatus)
+    const nextTaskList = this.getTaskListByStatus(taskNextStatus)
+
+    const taskFounded = currentTaskList.value.find(task => task.id === taskId)
+
+    if (!taskFounded) return
+
+    // Atualizando status
+    taskFounded.status = taskNextStatus
+
+    // Removendo da lista atual
+    const currentTaskListWithoutTask = currentTaskList.value.filter(task => task.id !== taskId)
+
+    currentTaskList.next([...currentTaskListWithoutTask])
+
+    // Adicionando na nova lista
+    nextTaskList.next([...nextTaskList.value, { ...taskFounded }])
+  }
+
+  private getTaskListByStatus(taskStatus: TaskStatus): BehaviorSubject<ITask[]> {
+    const taskListObj = {
+      [TaskStatusEnum.TODO]: this.todoTasks$,
+      [TaskStatusEnum.DOING]: this.doingTasks$,
+      [TaskStatusEnum.DONE]: this.doneTasks$
+    }
+
+    return taskListObj[taskStatus]
+  }
 }
