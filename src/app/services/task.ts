@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, map } from 'rxjs'
 
 import { IComment } from '@/interfaces/comment'
 import { TaskStatus } from '@/interfaces/task-status'
+import { ITaskFormControls } from '@/interfaces/task-form-controls'
+import { TaskStatusEnum } from '@/enums/task-status'
+import { generateUniqueIdWithTimestamp } from '@/utils/generate-unique-id-with-timestamp'
 
 export interface ITask {
   id: string
@@ -18,7 +21,7 @@ export interface ITask {
 export class TaskService {
   // TODO
   private todoTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly todoTasks = this.todoTasks$.asObservable()
+  readonly todoTasks = this.todoTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
 
   // DOING
   private doingTasks$ = new BehaviorSubject<ITask[]>([])
@@ -27,4 +30,17 @@ export class TaskService {
   // DONE
   private doneTasks$ = new BehaviorSubject<ITask[]>([])
   readonly doneTasks = this.doneTasks$.asObservable()
+
+  addTask(taskInfos: ITaskFormControls): void {
+    const newTask: ITask = {
+      ...taskInfos,
+      status: TaskStatusEnum.TODO,
+      id: generateUniqueIdWithTimestamp(),
+      commments: []
+    }
+
+    const currentList = this.todoTasks$.value
+
+    this.todoTasks$.next([...currentList, newTask])
+  }
 }
