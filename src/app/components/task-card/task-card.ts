@@ -41,4 +41,8 @@ export class TaskCard {
       }
     })
   }
+
+  deleteTask(): void {
+    this._taskService.deleteTask(this.task.id, this.task.status)
+  }
 }

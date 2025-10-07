@@ -100,6 +100,14 @@ export class TaskService {
     taskList.next(updateTaskList)
   }
 
+  deleteTask(taskId: string, taskCurrentStatus: TaskStatus): void {
+    const taskList = this.getTaskListByStatus(taskCurrentStatus)
+
+    const newTaskList = taskList.value.filter(task => task.id !== taskId)
+
+    taskList.next(newTaskList)
+  }
+
   private getTaskListByStatus(taskStatus: TaskStatus): BehaviorSubject<ITask[]> {
     const taskListObj = {
       [TaskStatusEnum.TODO]: this.todoTasks$,
