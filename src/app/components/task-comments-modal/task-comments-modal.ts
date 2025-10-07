@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { Component, ElementRef, inject, ViewChild } from '@angular/core'
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog'
 
@@ -16,6 +16,8 @@ export class TaskCommentsModal {
   taskCommentsChanged = false
   commentControl = new FormControl('', [Validators.required])
 
+  @ViewChild('commentInput') commentInputRef!: ElementRef<HTMLInputElement>
+
   readonly _task: ITask = inject(DIALOG_DATA)
   readonly _dialogRef: DialogRef<boolean> = inject(DialogRef)
 
@@ -31,7 +33,15 @@ export class TaskCommentsModal {
       this.commentControl.reset()
 
       this.taskCommentsChanged = true
+
+      this.commentInputRef.nativeElement.focus()
     }
+  }
+
+  onRemoveModal(commentId: string): void {
+    this._task.comments = this._task.comments.filter(comment => comment.id !== commentId)
+
+    this.taskCommentsChanged = true
   }
 
   onCloseModal(): void {

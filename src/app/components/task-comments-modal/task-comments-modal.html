@@ -31,6 +31,7 @@
       <div class="flex items-start gap-2">
         <div class="flex w-full flex-col">
           <input
+            #commentInput
             type="text"
             placeholder="Adicione um comentário"
             class="flex-1 rounded-lg border border-[#d1d5db] bg-white p-3 text-sm font-light"
@@ -70,6 +71,7 @@
 
               <button
                 type="button"
+                (click)="onRemoveModal(comment.id)"
                 class="cursor-pointer text-xs font-semibold underline underline-offset-2"
               >
                 apagar
