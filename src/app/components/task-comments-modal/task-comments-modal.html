@@ -6,7 +6,12 @@
 
     <h1 class="text-lg font-semibold">Comentar tarefa</h1>
 
-    <img src="images/icon-close.svg" class="ml-auto cursor-pointer" alt="" />
+    <img
+      src="images/icon-close.svg"
+      class="ml-auto cursor-pointer"
+      alt=""
+      (click)="onCloseModal()"
+    />
   </div>
 
   <div class="border-t border-[#d1d5db] p-4">
@@ -29,13 +34,20 @@
             type="text"
             placeholder="Adicione um comentário"
             class="flex-1 rounded-lg border border-[#d1d5db] bg-white p-3 text-sm font-light"
+            [formControl]="commentControl"
           />
-          <p class="text-sm font-semibold text-red-500">O campo é obrigatório.</p>
         </div>
 
         <button
           type="button"
-          class="cursor-pointer rounded-xl bg-[#2a89ef] px-4 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/50 transition-transform duration-75 active:translate-y-1"
+          (click)="onAddComment()"
+          [disabled]="commentControl.invalid"
+          class="{{`cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold text-white
+          ${commentControl.invalid
+            ? 'bg-[#d7d8d8]'
+            : 'bg-[#2a89ef] shadow-md shadow-blue-500/50 transition-transform duration-75 active:translate-y-1'
+          }`}}
+          "
         >
           Adicionar
         </button>
@@ -45,48 +57,26 @@
         <p class="text-sm font-bold">Comentários</p>
       </div>
 
-      <!-- Comentários -->
       <div class="scrollbar-hidden flex max-h-44 flex-col gap-5 overflow-scroll">
-        <div class="flex flex-col gap-3 border-b border-[#d1d5db]">
-          <div>
-            <p class="text-sm font-light text-[#374151]">Já finalizei!</p>
-          </div>
+        <!-- Comentários -->
+        @for (comment of _task.comments; track comment.id; let last = $last) {
+          <div class="{{`flex flex-col gap-3 ${last ? '' : 'border-b border-[#d1d5db]'}`}}">
+            <div>
+              <p class="text-sm font-light text-[#374151]">{{ comment.description }}</p>
+            </div>
 
-          <div class="mb-3 flex gap-4">
-            <p class="text-xs font-normal text-[#9ca3af]">comentado há 10 min atrás</p>
-            <p class="cursor-pointer text-xs font-semibold underline underline-offset-2">apagar</p>
-          </div>
-        </div>
-      </div>
+            <div class="{{`flex gap-4 ${last ? '' : 'mb-3'}`}}">
+              <p class="text-xs font-normal text-[#9ca3af]">comentado há 10 min atrás</p>
 
-      <div class="scrollbar-hidden flex max-h-44 flex-col gap-5 overflow-scroll">
-        <div class="flex flex-col gap-3 border-b border-[#d1d5db]">
-          <div>
-            <p class="text-sm font-light text-[#374151]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam quam praesentium
-              corporis quis ea, sint delectus unde totam commodi distinctio. Vero rerum temporibus
-              facere veniam, rem voluptates suscipit? Facilis, asperiores!
-            </p>
+              <button
+                type="button"
+                class="cursor-pointer text-xs font-semibold underline underline-offset-2"
+              >
+                apagar
+              </button>
+            </div>
           </div>
-
-          <div class="mb-3 flex gap-4">
-            <p class="text-xs font-normal text-[#9ca3af]">comentado há 10 min atrás</p>
-            <p class="cursor-pointer text-xs font-semibold underline underline-offset-2">apagar</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="scrollbar-hidden flex max-h-44 flex-col gap-5 overflow-scroll">
-        <div class="flex flex-col gap-3">
-          <div>
-            <p class="text-sm font-light text-[#374151]">Já finalizei!</p>
-          </div>
-
-          <div class="mb-3 flex gap-4">
-            <p class="text-xs font-normal text-[#9ca3af]">comentado há 10 min atrás</p>
-            <p class="cursor-pointer text-xs font-semibold underline underline-offset-2">apagar</p>
-          </div>
-        </div>
+        }
       </div>
     </div>
   </div>

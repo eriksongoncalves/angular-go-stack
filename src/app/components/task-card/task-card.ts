@@ -31,4 +31,14 @@ export class TaskCard {
       }
     })
   }
+
+  openTaskCommentsModal(): void {
+    const dialogRef = this._modalControllerService.openTaskCommentsModal(this.task)
+
+    dialogRef.closed.subscribe(taskCommentsChanged => {
+      if (taskCommentsChanged) {
+        this._taskService.updateTaskComments(this.task.id, this.task.status, this.task.comments)
+      }
+    })
+  }
 }

@@ -11,7 +11,7 @@ export interface ITask {
   id: string
   name: string
   description: string
-  commments: IComment[]
+  comments: IComment[]
   status: TaskStatus
 }
 
@@ -36,7 +36,7 @@ export class TaskService {
       ...taskInfos,
       status: TaskStatusEnum.TODO,
       id: generateUniqueIdWithTimestamp(),
-      commments: []
+      comments: []
     }
 
     const currentList = this.todoTasks$.value
@@ -81,6 +81,23 @@ export class TaskService {
 
     // Adicionando na nova lista
     nextTaskList.next([...nextTaskList.value, { ...taskFounded }])
+  }
+
+  updateTaskComments(
+    taskId: string,
+    taskCurrentStatus: TaskStatus,
+    newTaskComments: IComment[]
+  ): void {
+    const taskList = this.getTaskListByStatus(taskCurrentStatus)
+
+    const taskIndex = taskList.value.findIndex(task => task.id === taskId)
+
+    if (taskIndex === -1) return
+
+    const updateTaskList = [...taskList.value]
+    updateTaskList[taskIndex] = { ...updateTaskList[taskIndex], comments: [...newTaskComments] }
+
+    taskList.next(updateTaskList)
   }
 
   private getTaskListByStatus(taskStatus: TaskStatus): BehaviorSubject<ITask[]> {

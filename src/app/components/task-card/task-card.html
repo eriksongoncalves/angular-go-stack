@@ -7,9 +7,13 @@
   <div class="item-center flex gap-1">
     <img src="images/icon-comments.svg" alt="" />
 
-    <p class="cursor-pointer text-xs font-semibold text-[#2a89ef] underline underline-offset-2">
-      {{ task.commments.length }} comentários
-    </p>
+    <button
+      type="button"
+      (click)="openTaskCommentsModal()"
+      class="cursor-pointer text-xs font-semibold text-[#2a89ef] underline underline-offset-2"
+    >
+      {{ task.comments.length }} comentários
+    </button>
 
     <button
       type="button"
