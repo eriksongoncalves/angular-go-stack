@@ -1,6 +1,7 @@
-import { ITaskFormControls } from '@/interfaces/task-form-controls'
-import { Component, inject } from '@angular/core'
+import { Component, inject, Input } from '@angular/core'
 
+import { ITaskFormControls } from '@/interfaces/task-form-controls'
+import { ITask, TaskService } from '@/services/task'
 import { ModalControllerService } from '@services/modal-controller'
 
 @Component({
@@ -10,16 +11,24 @@ import { ModalControllerService } from '@services/modal-controller'
   styleUrl: './task-card.css'
 })
 export class TaskCard {
+  @Input({ required: true }) task!: ITask
+
   private readonly _modalControllerService = inject(ModalControllerService)
+  private readonly _taskService = inject(TaskService)
 
   openEditTaskModal(): void {
     const dialogRef = this._modalControllerService.openEditTaskModal({
-      name: 'Nome tarefa',
-      description: 'Descrição tarefa'
+      name: this.task.name,
+      description: this.task.description
     })
 
     dialogRef.closed.subscribe((formValues?: ITaskFormControls) => {
-      console.log('>>> Tarefa alterada: ', formValues)
+      if (formValues) {
+        this._taskService.updateTaskNameAndDescription({
+          ...this.task,
+          ...formValues
+        })
+      }
     })
   }
 }
