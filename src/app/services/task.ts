@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, map } from 'rxjs'
+import { BehaviorSubject, map, tap } from 'rxjs'
 
 import { IComment } from '@/interfaces/comment'
 import { TaskStatus } from '@/interfaces/task-status'
@@ -20,16 +20,31 @@ export interface ITask {
 })
 export class TaskService {
   // TODO
-  private todoTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly todoTasks = this.todoTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
+  private todoTasks$ = new BehaviorSubject<ITask[]>(
+    this.loadTasksFromLocalstorage(TaskStatusEnum.TODO)
+  )
+  readonly todoTasks = this.todoTasks$.asObservable().pipe(
+    map(tasks => structuredClone(tasks)),
+    tap(tasks => this.saveTasksOnLocalstorage(TaskStatusEnum.TODO, tasks))
+  )
 
   // DOING
-  private doingTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly doingTasks = this.doingTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
+  private doingTasks$ = new BehaviorSubject<ITask[]>(
+    this.loadTasksFromLocalstorage(TaskStatusEnum.DOING)
+  )
+  readonly doingTasks = this.doingTasks$.asObservable().pipe(
+    map(tasks => structuredClone(tasks)),
+    tap(tasks => this.saveTasksOnLocalstorage(TaskStatusEnum.DOING, tasks))
+  )
 
   // DONE
-  private doneTasks$ = new BehaviorSubject<ITask[]>([])
-  readonly doneTasks = this.doneTasks$.asObservable().pipe(map(tasks => structuredClone(tasks)))
+  private doneTasks$ = new BehaviorSubject<ITask[]>(
+    this.loadTasksFromLocalstorage(TaskStatusEnum.DONE)
+  )
+  readonly doneTasks = this.doneTasks$.asObservable().pipe(
+    map(tasks => structuredClone(tasks)),
+    tap(tasks => this.saveTasksOnLocalstorage(TaskStatusEnum.DONE, tasks))
+  )
 
   addTask(taskInfos: ITaskFormControls): void {
     const newTask: ITask = {
@@ -116,5 +131,24 @@ export class TaskService {
     }
 
     return taskListObj[taskStatus]
+  }
+
+  private saveTasksOnLocalstorage(key: string, tasks: ITask[]): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(tasks))
+    } catch {
+      console.log('Erro ao salvar tarefas no localstorage')
+    }
+  }
+
+  private loadTasksFromLocalstorage(key: string): ITask[] {
+    try {
+      const storageTasks = localStorage.getItem(key)
+
+      return (storageTasks ? JSON.parse(storageTasks) : []) as ITask[]
+    } catch {
+      console.log('Erro ao salvar tarefas no localstorage')
+      return []
+    }
   }
 }
